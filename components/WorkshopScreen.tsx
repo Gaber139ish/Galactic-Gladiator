@@ -46,7 +46,7 @@ const WorkshopScreen: React.FC<WorkshopScreenProps> = ({ player, craftingRecipes
         const canCraft = hasMaterials && hasGold && hasBaseItem;
 
         return (
-            <div className={`bg-slate-800 p-4 rounded-lg border border-slate-700 flex flex-col justify-between ${!canCraft ? 'opacity-60' : ''}`}>
+            <div className={`hud-card p-4 rounded-lg flex flex-col justify-between ${!canCraft ? 'opacity-60' : ''}`}>
                 <div>
                     <div className="flex justify-between items-center">
                         <h4 className="text-lg font-bold text-white">Produce: <span className={rarityColor}>{resultItem.name}</span></h4>
@@ -74,7 +74,7 @@ const WorkshopScreen: React.FC<WorkshopScreenProps> = ({ player, craftingRecipes
                         </ul>
                     </div>
                 </div>
-                <button onClick={() => onCraft(recipe)} disabled={!canCraft} className="w-full mt-4 bg-green-600 hover:bg-green-500 disabled:bg-slate-600 text-white font-bold py-2 px-3 rounded-md transition-colors">
+                <button onClick={() => onCraft(recipe)} disabled={!canCraft} className="w-full mt-4 btn btn-success !py-2">
                     {baseItem ? 'Modify' : 'Craft'}
                 </button>
             </div>
@@ -88,14 +88,14 @@ const WorkshopScreen: React.FC<WorkshopScreenProps> = ({ player, craftingRecipes
                     <h2 className="text-3xl font-orbitron text-cyan-300">Workshop</h2>
                     <p className="text-yellow-400 font-bold">Your Gold: {player.gold} G</p>
                 </div>
-                <button onClick={() => { soundService.playSound('ui_click'); onBack(); }} className="bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-4 rounded-lg transition-colors">
-                Back to Hub
+                <button onClick={() => { soundService.playSound('ui_click'); onBack(); }} className="btn btn-secondary">
+                Back
                 </button>
             </div>
 
-            <div className="flex space-x-2 mt-2 border-b border-slate-700">
-                <button onClick={() => { soundService.playSound('ui_click'); setActiveTab('craft'); }} className={`py-2 px-4 font-bold ${activeTab === 'craft' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-400'}`}>Crafting</button>
-                <button onClick={() => { soundService.playSound('ui_click'); setActiveTab('modify'); }} className={`py-2 px-4 font-bold ${activeTab === 'modify' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-400'}`}>Item Modification</button>
+            <div className="flex space-x-2 mt-2 border-b-2 border-cyan-500/20">
+                <button onClick={() => { soundService.playSound('ui_click'); setActiveTab('craft'); }} className={`py-2 px-4 font-bold transition-colors ${activeTab === 'craft' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-400 hover:text-white'}`}>Crafting</button>
+                <button onClick={() => { soundService.playSound('ui_click'); setActiveTab('modify'); }} className={`py-2 px-4 font-bold transition-colors ${activeTab === 'modify' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-400 hover:text-white'}`}>Modification</button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[60vh] overflow-y-auto pr-2">

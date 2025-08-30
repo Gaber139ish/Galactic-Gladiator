@@ -7,79 +7,232 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;500&display=swap');
+      
+      :root {
+        --color-bg: #03040B;
+        --color-primary: #00BFFF; /* DeepSkyBlue */
+        --color-secondary: #FF00FF; /* Magenta */
+        --color-text: #E0E0E0;
+        --font-heading: 'Orbitron', sans-serif;
+        --font-body: 'Roboto', sans-serif;
+      }
+
       body {
-        font-family: 'Roboto', sans-serif;
+        font-family: var(--font-body);
+        color: var(--color-text);
+        background-color: var(--color-bg);
+        background-image: 
+          radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+          radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+          radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+          radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
+        background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px; 
+        background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+        animation: move-stars 200s linear infinite;
+        overflow: hidden; /* Hide scrollbars from starfield */
       }
+      
       h1, h2, h3, h4, .font-orbitron {
-        font-family: 'Orbitron', sans-serif;
+        font-family: var(--font-heading);
       }
-      .animate-shake {
-        animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+
+      @keyframes move-stars {
+        from { background-position: 0 0; }
+        to { background-position: -10000px 5000px; }
       }
+
+      /* Main Title Animation */
+      @keyframes neon-flicker {
+        0%, 100% {
+          text-shadow: 0 0 5px var(--color-primary), 0 0 10px var(--color-primary), 0 0 20px var(--color-primary), 0 0 40px var(--color-secondary), 0 0 80px var(--color-secondary);
+        }
+        50% {
+          text-shadow: 0 0 2px var(--color-primary), 0 0 5px var(--color-primary), 0 0 10px var(--color-primary), 0 0 20px var(--color-secondary), 0 0 40px var(--color-secondary);
+        }
+      }
+      .title-glow {
+        color: #fff;
+        animation: neon-flicker 2.5s infinite alternate;
+      }
+
+      /* Main Container */
+      .hud-container {
+        background: rgba(10, 20, 40, 0.6);
+        border: 1px solid rgba(0, 191, 255, 0.4);
+        box-shadow: 0 0 30px rgba(0, 191, 255, 0.2) inset, 0 0 15px rgba(0, 191, 255, 0.3);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      /* Generic HUD Card */
+      .hud-card {
+        background: rgba(10, 20, 40, 0.5);
+        border: 1px solid rgba(0, 191, 255, 0.2);
+        transition: all 0.3s ease;
+      }
+      .hud-card-interactive:hover {
+        border-color: rgba(0, 191, 255, 0.7);
+        box-shadow: 0 0 10px rgba(0, 191, 255, 0.3);
+        transform: translateY(-2px);
+      }
+      
+      /* Buttons */
+      .btn {
+        background: transparent;
+        border: 2px solid;
+        color: var(--color-text);
+        padding: 0.75rem 1.5rem;
+        font-family: var(--font-heading);
+        font-weight: bold;
+        text-transform: uppercase;
+        position: relative;
+        transition: all 0.3s ease;
+        overflow: hidden;
+        z-index: 1;
+        clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+      }
+      .btn::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: var(--btn-glow-color);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
+      }
+      .btn:hover {
+        color: white;
+        box-shadow: 0 0 15px var(--btn-glow-color), 0 0 5px white inset;
+        text-shadow: 0 0 5px white;
+      }
+      .btn:hover::before {
+        opacity: 0.2;
+      }
+      .btn:disabled {
+        border-color: #555 !important;
+        color: #888;
+        cursor: not-allowed;
+      }
+      .btn:disabled:hover { box-shadow: none; text-shadow: none; }
+      .btn:disabled::before { opacity: 0; }
+
+      .btn-primary { border-color: var(--color-primary); --btn-glow-color: var(--color-primary); }
+      .btn-danger { border-color: #f43f5e; --btn-glow-color: #f43f5e; }
+      .btn-warning { border-color: #f59e0b; --btn-glow-color: #f59e0b; }
+      .btn-info { border-color: #6366f1; --btn-glow-color: #6366f1; }
+      .btn-success { border-color: #22c55e; --btn-glow-color: #22c55e; }
+      .btn-secondary { border-color: #64748b; --btn-glow-color: #64748b; }
+
+      /* Inputs & Textareas */
+      .hud-input {
+        background: transparent !important;
+        border: none !important;
+        border-bottom: 2px solid rgba(0, 191, 255, 0.4) !important;
+        border-radius: 0 !important;
+        padding: 0.5rem 0.25rem !important;
+        transition: border-color 0.3s ease !important;
+        color: white !important;
+      }
+      .hud-input:focus {
+        outline: none !important;
+        border-color: var(--color-primary) !important;
+        box-shadow: none !important;
+      }
+       .hud-input::placeholder {
+          color: #94a3b8 !important;
+      }
+
+      /* Progress Bars */
+      .progress-bar-track {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(0, 191, 255, 0.2);
+        border-radius: 9999px;
+        padding: 2px;
+        height: 1rem;
+      }
+      .progress-bar-fill {
+        border-radius: 9999px;
+        transition: width 0.5s ease-in-out;
+        box-shadow: 0 0 8px var(--glow-color);
+      }
+      .progress-bar-fill-hp {
+          background: linear-gradient(90deg, #F92C83, #FF8A5B);
+          --glow-color: #F92C83;
+      }
+      .progress-bar-fill-mp {
+          background: linear-gradient(90deg, #2C7CF9, #5BFFD4);
+          --glow-color: #2C7CF9;
+      }
+      .progress-bar-fill-xp {
+          background: linear-gradient(90deg, #F9D42C, #FFC45B);
+          --glow-color: #F9D42C;
+      }
+
+      /* Gladiator Sprites */
+      .gladiator-sprite {
+        height: 12rem; width: 12rem;
+        margin: 1rem auto;
+        position: relative;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .gladiator-sprite::before {
+        content: ''; position: absolute; inset: 0; border-radius: 50%; padding: 4px; 
+        background: conic-gradient(from 0deg, var(--color-secondary), var(--color-primary), var(--color-secondary));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor; mask-composite: exclude;
+        animation: spin 3s linear infinite;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      .gladiator-sprite-inner {
+        width: calc(100% - 8px); height: calc(100% - 8px);
+        border-radius: 50%; position: relative; overflow: hidden;
+      }
+      .gladiator-sprite-inner::after {
+        content: ''; position: absolute; inset: 0; opacity: 0.8;
+      }
+      .player-sprite .gladiator-sprite-inner::after {
+        background: radial-gradient(circle, var(--color-primary) 20%, transparent 70%), 
+                    radial-gradient(circle, rgba(255,0,255,0.4) 30%, transparent 60%);
+        animation: pulse 2s infinite ease-in-out;
+      }
+      .enemy-sprite .gladiator-sprite-inner::after {
+        background: radial-gradient(circle, #f43f5e 20%, transparent 70%),
+                    radial-gradient(circle, rgba(255, 165, 0, 0.4) 30%, transparent 60%);
+        animation: pulse 2.5s infinite ease-in-out;
+      }
+      @keyframes pulse {
+          0%, 100% { transform: scale(1); opacity: 0.8; }
+          50% { transform: scale(1.1); opacity: 1; }
+      }
+
+      /* Attack/Hit Animations */
+      .animate-shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
       @keyframes shake {
         0%, 100% { transform: translateX(0) rotate(0); }
-        5% { filter: brightness(1.8) drop-shadow(0 0 8px rgba(255, 100, 100, 0.7)); } /* Red flash */
+        5% { filter: brightness(1.8) drop-shadow(0 0 8px rgba(255, 100, 100, 0.7)); }
         10%, 50% { filter: brightness(1); }
         20% { transform: translateX(-9px) rotate(-3deg); }
         40% { transform: translateX(9px) rotate(3deg); }
         60% { transform: translateX(-5px) rotate(1.5deg); }
         80% { transform: translateX(5px) rotate(-1.5deg); }
       }
-      .animate-poison {
-        animation: poison-pulse 1.5s infinite;
+      .animate-attack-player { animation: lunge-player 0.4s ease-in-out; }
+      @keyframes lunge-player {
+        0%, 100% { transform: translateX(0); } 40% { transform: translateX(35px) scale(1.08); } 80% { transform: translateX(30px) scale(1.06); }
       }
+      .animate-attack-enemy { animation: lunge-enemy 0.4s ease-in-out; }
+      @keyframes lunge-enemy {
+        0%, 100% { transform: translateX(0); } 40% { transform: translateX(-35px) scale(1.08); } 80% { transform: translateX(-30px) scale(1.06); }
+      }
+      .animate-poison { animation: poison-pulse 1.5s infinite; }
       @keyframes poison-pulse {
         0%, 100% { box-shadow: 0 0 10px #16a34a, 0 0 20px #16a34a inset; }
         50% { box-shadow: 0 0 15px #4ade80, 0 0 30px #4ade80 inset; }
       }
-       .animate-stun {
-        animation: stun-shake 0.8s infinite;
-      }
+       .animate-stun { animation: stun-shake 0.8s infinite; }
       @keyframes stun-shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-3px) rotate(-2deg); }
-        75% { transform: translateX(3px) rotate(2deg); }
-      }
-      /* Gladiator Sprites */
-      .gladiator-sprite {
-        height: 12rem; /* 192px */
-        width: 12rem; /* 192px */
-        margin: 1rem auto;
-        border-radius: 9999px;
-        border-width: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.2s ease-out;
-      }
-      .player-sprite {
-        border-color: #06b6d4; /* cyan-500 */
-        background: radial-gradient(circle, #22d3ee, #0891b2);
-        box-shadow: 0 0 15px #06b6d4;
-      }
-      .enemy-sprite {
-        border-color: #f43f5e; /* rose-500 */
-        background: radial-gradient(circle, #fb7185, #e11d48);
-        box-shadow: 0 0 15px #f43f5e;
-      }
-
-      /* Attack Animations */
-      .animate-attack-player {
-        animation: lunge-player 0.4s ease-in-out;
-      }
-      @keyframes lunge-player {
-        0%, 100% { transform: translateX(0); }
-        40% { transform: translateX(35px) scale(1.08); }
-        80% { transform: translateX(30px) scale(1.06); }
-      }
-
-      .animate-attack-enemy {
-        animation: lunge-enemy 0.4s ease-in-out;
-      }
-      @keyframes lunge-enemy {
-        0%, 100% { transform: translateX(0); }
-        40% { transform: translateX(-35px) scale(1.08); }
-        80% { transform: translateX(-30px) scale(1.06); }
+        0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px) rotate(-2deg); } 75% { transform: translateX(3px) rotate(2deg); }
       }
     </style>
   <script type="importmap">
@@ -93,7 +246,7 @@
 }
 </script>
 </head>
-  <body class="bg-slate-900 text-slate-200">
+  <body class="text-slate-200">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

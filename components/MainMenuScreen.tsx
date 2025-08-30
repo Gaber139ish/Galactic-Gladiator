@@ -19,7 +19,7 @@ const MainMenuScreen: React.FC<MainMenuScreenProps> = ({ saveExists, onContinue,
                 soundService.playSound('ui_click_confirm');
                 onContinue();
               }}
-              className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-lg text-xl font-orbitron transition-colors"
+              className="w-full btn btn-primary text-xl"
             >
               Continue
             </button>
@@ -29,7 +29,7 @@ const MainMenuScreen: React.FC<MainMenuScreenProps> = ({ saveExists, onContinue,
                 soundService.playSound('ui_click');
                 onNewGame();
             }}
-            className="w-full bg-slate-600 hover:bg-slate-500 text-white font-bold py-3 px-4 rounded-lg text-xl font-orbitron transition-colors"
+            className="w-full btn btn-secondary text-xl"
           >
             New Game
           </button>

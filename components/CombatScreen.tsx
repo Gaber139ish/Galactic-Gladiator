@@ -13,9 +13,9 @@ interface CombatScreenProps {
   setLog: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const ProgressBar: React.FC<{ value: number; max: number; color: string; }> = ({ value, max, color }) => (
-    <div className="w-full bg-slate-700 rounded-full h-4 border-2 border-slate-600">
-        <div className={`${color} h-full rounded-full transition-all duration-500`} style={{ width: `${Math.max(0, value / max) * 100}%` }}></div>
+const ProgressBar: React.FC<{ value: number; max: number; colorClass: string; }> = ({ value, max, colorClass }) => (
+    <div className="w-full progress-bar-track">
+        <div className={`h-full progress-bar-fill ${colorClass}`} style={{ width: `${Math.max(0, value / max) * 100}%` }}></div>
     </div>
 );
 
@@ -37,22 +37,22 @@ const GladiatorCard: React.FC<{ entity: Player | Enemy, currentHealth: number, c
     if(statusEffects.some(e => e.type === StatusEffectType.STUN)) statusAnimation = 'animate-stun';
 
     return (
-    <div className={`relative p-6 rounded-lg border border-slate-700 bg-slate-900/50 text-center transition-transform duration-200 ${animation} ${statusAnimation}`}>
+    <div className={`relative hud-card p-6 rounded-lg text-center transition-transform duration-200 ${animation} ${statusAnimation}`}>
         <h3 className="text-3xl font-orbitron">{entity.name}</h3>
         <p className="text-slate-400">Level {entity.level}</p>
         <div className="my-4 space-y-2">
-            <ProgressBar value={currentHealth} max={entity.maxHealth} color={isPlayer ? 'bg-green-500' : 'bg-red-600'} />
+            <ProgressBar value={currentHealth} max={entity.maxHealth} colorClass={'progress-bar-fill-hp'} />
             <p className="text-center mt-1 font-mono text-sm">{currentHealth} / {entity.maxHealth} HP</p>
             {isPlayer && currentMana !== undefined && (
                 <>
-                <ProgressBar value={currentMana} max={(entity as Player).maxMana} color={'bg-blue-500'} />
+                <ProgressBar value={currentMana} max={(entity as Player).maxMana} colorClass={'progress-bar-fill-mp'} />
                 <p className="text-center mt-1 font-mono text-sm">{currentMana} / {(entity as Player).maxMana} MP</p>
                 </>
             )}
         </div>
         
         <div className={`gladiator-sprite ${isPlayer ? 'player-sprite' : 'enemy-sprite'}`}>
-            <div className="w-1/2 h-1/2 bg-black/20 rounded-full shadow-inner"></div>
+            <div className="gladiator-sprite-inner"></div>
         </div>
 
         <div className="absolute top-2 right-2 flex gap-2">
@@ -492,7 +492,7 @@ const CombatScreen: React.FC<CombatScreenProps> = ({ player, setPlayer, enemy, a
 
   return (
     <div className="animate-fade-in">
-        <div className="text-center mb-4 p-2 bg-slate-900/70 rounded-lg border border-slate-700">
+        <div className="text-center mb-4 hud-card p-2 rounded-lg">
             <h2 className="text-2xl font-orbitron text-cyan-300">{arena.name}</h2>
             <div className="flex justify-center gap-4 text-xs text-cyan-400">
                 {arena.environmentalEffects.map(e => <span key={e.description}>{e.description}</span>)}
@@ -504,7 +504,7 @@ const CombatScreen: React.FC<CombatScreenProps> = ({ player, setPlayer, enemy, a
             <GladiatorCard entity={enemy} currentHealth={enemyHealth} statusEffects={enemyStatusEffects} animation={enemyAnimation} />
         </div>
         
-        <div className="mt-6 bg-slate-900 border border-slate-700 rounded-lg p-4 h-40 overflow-y-auto" ref={logRef}>
+        <div className="mt-6 hud-card rounded-lg p-4 h-40 overflow-y-auto" ref={logRef}>
             {log.map((msg, i) => (
                 <p key={i} className="font-mono text-sm text-slate-300">{`> ${msg}`}</p>
             ))}
@@ -516,7 +516,7 @@ const CombatScreen: React.FC<CombatScreenProps> = ({ player, setPlayer, enemy, a
                     <button 
                         onClick={handlePlayerAttack} 
                         disabled={!isPlayerTurn} 
-                        className="bg-red-600 hover:bg-red-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg text-lg font-orbitron transition-colors">
+                        className="btn btn-danger">
                         Attack
                     </button>
                     {playerSkills.map(skill => (
@@ -524,7 +524,7 @@ const CombatScreen: React.FC<CombatScreenProps> = ({ player, setPlayer, enemy, a
                             key={skill.id}
                             onClick={() => handleUseSkill(skill)}
                             disabled={!isPlayerTurn || (skill.cooldown && skillCooldowns[skill.id] > 0) || (skill.manaCost && playerMana < skill.manaCost)}
-                            className="bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg text-lg font-orbitron transition-colors"
+                            className="btn btn-primary"
                             title={skill.manaCost ? `${skill.manaCost} Mana` : undefined}
                         >
                             {skill.name} {skill.cooldown && skillCooldowns[skill.id] > 0 ? `(${skillCooldowns[skill.id]})` : ''}
@@ -535,8 +535,8 @@ const CombatScreen: React.FC<CombatScreenProps> = ({ player, setPlayer, enemy, a
         )}
 
         {isCombatOver && combatResult && (
-            <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-                <div className="bg-slate-800 p-8 rounded-xl border border-cyan-500/50 shadow-lg text-center animate-jump-in">
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+                <div className="hud-container p-8 rounded-xl text-center animate-jump-in">
                     <h2 className="text-4xl font-orbitron mb-4">{combatResult.win ? 'Victory!' : 'Defeated!'}</h2>
                     {combatResult.win && (
                         <div className="space-y-2 text-lg">
@@ -554,7 +554,7 @@ const CombatScreen: React.FC<CombatScreenProps> = ({ player, setPlayer, enemy, a
                     )}
                     <button 
                         onClick={() => onCombatEnd(combatResult.win, combatResult.loot, combatResult.gold, combatResult.xp)} 
-                        className="mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg text-lg font-orbitron transition-colors">
+                        className="mt-6 btn btn-primary">
                         Return to Hub
                     </button>
                 </div>

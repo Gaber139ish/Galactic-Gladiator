@@ -77,7 +77,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({ onCha
   };
 
   const Card: React.FC<{title: string; children: React.ReactNode;}> = ({ title, children }) => (
-    <div className="bg-slate-900/70 p-4 rounded-lg border border-slate-700 h-full">{children}</div>
+    <div className="hud-card p-4 rounded-lg h-full">{children}</div>
   );
 
   return (
@@ -95,7 +95,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({ onCha
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter Gladiator Name"
-            className="w-full bg-slate-700 border border-slate-600 rounded-md px-4 py-2 text-white placeholder-slate-400 focus:ring-cyan-500 focus:border-cyan-500 transition"
+            className="w-full hud-input"
             required
             />
              <div>
@@ -108,7 +108,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({ onCha
                                 soundService.playSound('ui_click');
                                 setGender(g);
                             }}
-                            className={`flex-1 p-2 rounded-lg border-2 cursor-pointer transition-all ${gender === g ? 'border-cyan-400 bg-cyan-900/20' : 'border-slate-700 bg-slate-900/50'}`}
+                            className={`flex-1 p-2 rounded-lg border-2 cursor-pointer transition-all ${gender === g ? 'border-cyan-400 bg-cyan-900/40' : 'border-slate-700 bg-slate-900/50'}`}
                         >
                             {g}
                         </button>
@@ -120,9 +120,9 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({ onCha
                 onChange={(e) => setBackstory(e.target.value)}
                 placeholder="Generate or write your backstory here..."
                 rows={5}
-                className="w-full bg-slate-700 border border-slate-600 rounded-md px-4 py-2 text-white placeholder-slate-400 focus:ring-cyan-500 focus:border-cyan-500 transition"
+                className="w-full hud-input"
             />
-            <button type="button" onClick={handleGenerateBackstory} disabled={isGenerating} className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-500 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+            <button type="button" onClick={handleGenerateBackstory} disabled={isGenerating} className="w-full btn btn-info">
             {isGenerating ? 'Generating...' : 'Generate Backstory with AI'}
           </button>
         </div>
@@ -137,9 +137,9 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({ onCha
               <div key={key} className="flex justify-between items-center mb-2 capitalize">
                 <span>{key}</span>
                 <div className="flex items-center gap-2">
-                  <button type="button" onClick={() => handleStatChange(key, -1)} className="bg-slate-600 w-6 h-6 rounded">-</button>
+                  <button type="button" onClick={() => handleStatChange(key, -1)} className="bg-slate-700 hover:bg-slate-600 w-6 h-6 rounded transition-colors">-</button>
                   <span className="w-16 text-center font-bold">{totalStats[key]} <span className="text-xs text-cyan-400">(Base: {stats[key]})</span></span>
-                  <button type="button" onClick={() => handleStatChange(key, 1)} className="bg-slate-600 w-6 h-6 rounded">+</button>
+                  <button type="button" onClick={() => handleStatChange(key, 1)} className="bg-slate-700 hover:bg-slate-600 w-6 h-6 rounded transition-colors">+</button>
                 </div>
               </div>
             );
@@ -152,7 +152,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({ onCha
         <h3 className="font-orbitron text-xl mb-2 text-cyan-400">Choose Race</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {RACES.map((race, index) => (
-            <div key={race.name} onClick={() => { soundService.playSound('ui_click'); setSelectedRaceIndex(index); }} className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${selectedRaceIndex === index ? 'border-cyan-400 bg-cyan-900/20' : 'border-slate-700 bg-slate-900/50'}`}>
+            <div key={race.name} onClick={() => { soundService.playSound('ui_click'); setSelectedRaceIndex(index); }} className={`hud-card hud-card-interactive p-4 rounded-lg cursor-pointer ${selectedRaceIndex === index ? 'border-cyan-400' : 'border-transparent'}`}>
               <h4 className="font-bold text-lg">{race.name}</h4>
               <p className="text-sm text-slate-400">{race.description}</p>
             </div>
@@ -165,7 +165,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({ onCha
         <h3 className="font-orbitron text-xl mb-2 text-cyan-400">Choose Class</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {CLASSES.map((bg, index) => (
-            <div key={bg.name} onClick={() => { soundService.playSound('ui_click'); setSelectedClassIndex(index); }} className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${selectedClassIndex === index ? 'border-cyan-400 bg-cyan-900/20' : 'border-slate-700 bg-slate-900/50'}`}>
+            <div key={bg.name} onClick={() => { soundService.playSound('ui_click'); setSelectedClassIndex(index); }} className={`hud-card hud-card-interactive p-4 rounded-lg cursor-pointer ${selectedClassIndex === index ? 'border-cyan-400' : 'border-transparent'}`}>
               <h4 className="font-bold text-lg">{bg.name}</h4>
               <p className="text-sm text-slate-400">{bg.description}</p>
               <p className="text-sm text-cyan-400 mt-1">{bg.startingBonusText}</p>
@@ -174,7 +174,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({ onCha
         </div>
       </div>
 
-      <button type="submit" className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-lg text-xl font-orbitron transition-colors">
+      <button type="submit" className="w-full btn btn-primary text-xl">
         Enter the Arena
       </button>
     </form>

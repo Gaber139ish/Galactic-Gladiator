@@ -93,7 +93,7 @@ const CharacterSheetScreen: React.FC<CharacterSheetScreenProps> = ({ player, onB
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column: Bio & Stats */}
             <div className="lg:col-span-1 space-y-6">
-                <div className="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
+                <div className="hud-card p-4 rounded-lg">
                     <h3 className="font-orbitron text-xl text-cyan-400 mb-2">Biography</h3>
                     <p><span className="font-bold">Race:</span> {player.race.name}</p>
                     <p><span className="font-bold">Gender:</span> {player.gender}</p>
@@ -101,12 +101,12 @@ const CharacterSheetScreen: React.FC<CharacterSheetScreenProps> = ({ player, onB
                     <p><span className="font-bold">NG+:</span> {player.ngPlus}</p>
                     <p className="mt-2 text-sm text-slate-400 italic">{player.backstory}</p>
                 </div>
-                <div className="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
+                <div className="hud-card p-4 rounded-lg">
                     <h3 className="font-orbitron text-xl text-cyan-400 mb-2">Vitals</h3>
                     <p><span className="font-bold">Health:</span> {player.currentHealth} / {player.maxHealth}</p>
                     <p><span className="font-bold">Mana:</span> {player.currentMana} / {player.maxMana}</p>
                 </div>
-                <div className="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
+                <div className="hud-card p-4 rounded-lg">
                     <h3 className="font-orbitron text-xl text-cyan-400 mb-2">Attributes</h3>
                     <div className="space-y-2">
                     {(Object.keys(player.stats) as Array<keyof Stats>).map(stat => (
@@ -117,7 +117,7 @@ const CharacterSheetScreen: React.FC<CharacterSheetScreenProps> = ({ player, onB
                     ))}
                     </div>
                 </div>
-                <div className="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
+                <div className="hud-card p-4 rounded-lg">
                     <h3 className="font-orbitron text-xl text-cyan-400 mb-2">Resistances</h3>
                     <div className="space-y-2">
                     {Object.keys(DamageType).length > 0 && Object.keys(totalResistances).length > 0 ? Object.entries(totalResistances).map(([type, value]) => (
@@ -132,13 +132,13 @@ const CharacterSheetScreen: React.FC<CharacterSheetScreenProps> = ({ player, onB
 
             {/* Right Column: Equipment & Inventory */}
             <div className="lg:col-span-2 space-y-6">
-            <div className="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
+            <div className="hud-card p-4 rounded-lg">
                 <h3 className="font-orbitron text-xl text-cyan-400 mb-2">Equipment</h3>
                 <div className="space-y-3">
                 {(Object.values(ItemSlot)).map(slot => (
                     <div key={slot}>
                     <h4 className="font-bold text-slate-400">{slot}</h4>
-                    <div className="mt-1 p-3 bg-slate-800 rounded-md border border-slate-600 min-h-[60px]">
+                    <div className="mt-1 p-3 bg-slate-800/50 rounded-md border border-slate-700 min-h-[60px]">
                         {player.equipment[slot] ? (
                             <ItemDisplay item={player.equipment[slot]!} />
                         ) : (
@@ -149,23 +149,23 @@ const CharacterSheetScreen: React.FC<CharacterSheetScreenProps> = ({ player, onB
                 ))}
                 </div>
             </div>
-            <div className="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
+            <div className="hud-card p-4 rounded-lg">
                 <div className="flex justify-between items-center mb-2">
                     <h3 className="font-orbitron text-xl text-cyan-400">Inventory</h3>
                     <div className="space-x-2">
-                         <button onClick={onSortInventory} className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-3 rounded-md text-sm transition-colors">Sort</button>
-                         <button onClick={onOptimizeGear} className="bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-3 rounded-md text-sm transition-colors">Optimize Gear</button>
+                         <button onClick={onSortInventory} className="btn btn-secondary !py-1 !px-3 text-sm">Sort</button>
+                         <button onClick={onOptimizeGear} className="btn btn-success !py-1 !px-3 text-sm">Optimize</button>
                     </div>
                 </div>
                 {player.inventory.length > 0 ? (
                 <ul className="space-y-2 max-h-[40vh] overflow-y-auto pr-2">
                     {player.inventory.map((item, index) => (
-                    <li key={`${item.id}-${index}`} className="flex justify-between items-center bg-slate-800 p-2 rounded-md">
+                    <li key={`${item.id}-${index}`} className="flex justify-between items-center bg-slate-800/50 p-2 rounded-md">
                         <ItemDisplay item={item} />
                         {item.category === 'Gear' && (
                              <button 
                                 onClick={() => onEquipItem(item, index)}
-                                className="bg-cyan-700 hover:bg-cyan-600 text-white font-bold py-1 px-3 rounded-md text-sm transition-colors self-center ml-2">
+                                className="btn btn-primary !py-1 !px-3 text-sm self-center ml-2">
                                     Equip
                             </button>
                         )}
@@ -196,12 +196,12 @@ const CharacterSheetScreen: React.FC<CharacterSheetScreenProps> = ({ player, onB
                                 const isLearned = player.skills.includes(skill.id);
                                 const canLearn = player.level >= skill.levelRequired && (skill.prerequisites?.every(req => player.skills.includes(req)) ?? true);
                                 
-                                let statusClasses = 'border-slate-700 bg-slate-900/50';
-                                if (isLearned) statusClasses = 'border-green-500 bg-green-900/30';
-                                else if (canLearn) statusClasses = 'border-cyan-500 bg-cyan-900/20';
+                                let statusClasses = 'border-slate-700/50';
+                                if (isLearned) statusClasses = 'border-green-500/80';
+                                else if (canLearn) statusClasses = 'border-cyan-500/80';
 
                                 return (
-                                    <div key={skill.id} className={`p-4 rounded-lg border-2 ${statusClasses} flex flex-col justify-between`}>
+                                    <div key={skill.id} className={`hud-card p-4 rounded-lg border-2 ${statusClasses} flex flex-col justify-between`}>
                                         <div>
                                             <h4 className="font-bold text-lg text-white">{skill.name} <span className={`text-sm font-normal ${skill.type === SkillType.ACTIVE ? 'text-cyan-400' : 'text-yellow-400'}`}>({skill.type})</span></h4>
                                             {skill.manaCost && <p className="text-xs text-blue-400">Cost: {skill.manaCost} Mana</p>}
@@ -212,7 +212,7 @@ const CharacterSheetScreen: React.FC<CharacterSheetScreenProps> = ({ player, onB
                                             </div>
                                         </div>
                                         {!isLearned && canLearn && player.skillPoints > 0 && (
-                                            <button onClick={() => onLearnSkill(skill.id)} className="w-full mt-3 bg-green-600 hover:bg-green-500 text-white font-bold py-1 px-3 rounded-md text-sm transition-colors">
+                                            <button onClick={() => onLearnSkill(skill.id)} className="w-full mt-3 btn btn-success !py-1 text-sm">
                                                 Learn (1 Point)
                                             </button>
                                         )}
@@ -227,17 +227,17 @@ const CharacterSheetScreen: React.FC<CharacterSheetScreenProps> = ({ player, onB
     };
 
   return (
-    <div className="animate-fade-in p-4 space-y-6">
+    <div className="animate-fade-in space-y-6">
       <div className="flex justify-between items-center">
         <div>
             <h2 className="text-3xl font-orbitron text-cyan-300">{player.name}'s Dossier</h2>
-            <div className="flex space-x-2 mt-2 border-b border-slate-700">
-                <button onClick={() => { soundService.playSound('ui_click'); setActiveTab('dossier'); }} className={`py-2 px-4 font-bold ${activeTab === 'dossier' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-400'}`}>Dossier</button>
-                <button onClick={() => { soundService.playSound('ui_click'); setActiveTab('skills'); }} className={`py-2 px-4 font-bold ${activeTab === 'skills' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-400'}`}>Skills</button>
+            <div className="flex space-x-2 mt-2 border-b-2 border-cyan-500/20">
+                <button onClick={() => { soundService.playSound('ui_click'); setActiveTab('dossier'); }} className={`py-2 px-4 font-bold transition-colors ${activeTab === 'dossier' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-400 hover:text-white'}`}>Dossier</button>
+                <button onClick={() => { soundService.playSound('ui_click'); setActiveTab('skills'); }} className={`py-2 px-4 font-bold transition-colors ${activeTab === 'skills' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-400 hover:text-white'}`}>Skills</button>
             </div>
         </div>
-        <button onClick={() => { soundService.playSound('ui_click'); onBack(); }} className="bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-4 rounded-lg transition-colors self-start">
-          Back to Hub
+        <button onClick={() => { soundService.playSound('ui_click'); onBack(); }} className="btn btn-secondary self-start">
+          Back
         </button>
       </div>
 

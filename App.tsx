@@ -576,11 +576,11 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-200 flex flex-col items-center justify-center p-4">
-      <h1 className="text-5xl font-orbitron text-cyan-400 mb-2 shadow-lg" style={{textShadow: '0 0 10px #06b6d4, 0 0 20px #06b6d4'}}>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      <h1 className="text-5xl font-orbitron mb-4 title-glow">
         Galactic Gladiator
       </h1>
-      <div className="w-full max-w-6xl mx-auto bg-slate-800/50 rounded-xl border border-cyan-500/30 shadow-2xl shadow-cyan-500/10 p-4 sm:p-6 lg:p-8">
+      <div className="w-full max-w-6xl mx-auto hud-container rounded-xl p-4 sm:p-6 lg:p-8">
         {renderContent()}
       </div>
     </div>

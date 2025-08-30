@@ -46,7 +46,7 @@ const ShopScreen: React.FC<ShopScreenProps> = ({ player, shopInventory, onBuyIte
         };
 
         return (
-            <div className="bg-slate-800 p-3 rounded-lg flex justify-between items-center border border-slate-700">
+            <div className="hud-card p-3 rounded-lg flex justify-between items-center">
                 <div>
                     <p className={`font-bold ${rarityColor}`}>{item.name} <span className="text-xs font-normal text-slate-400">({item.type})</span></p>
                     <p className="text-xs text-slate-400">{item.description}</p>
@@ -63,11 +63,11 @@ const ShopScreen: React.FC<ShopScreenProps> = ({ player, shopInventory, onBuyIte
                         </div>
                     )}
                 </div>
-                <div className="text-right">
+                <div className="text-right flex-shrink-0 ml-4">
                     <p className="font-bold text-yellow-400">{actionLabel === "Buy" ? `${item.cost} G` : `${sellPrice} G`}</p>
                     <button 
                         onClick={onAction}
-                        className={`mt-1 text-white font-bold py-1 px-3 rounded-md text-sm transition-colors ${actionLabel === 'Buy' ? 'bg-green-600 hover:bg-green-500' : 'bg-yellow-700 hover:bg-yellow-600'}`}
+                        className={`mt-1 btn ${actionLabel === 'Buy' ? 'btn-success' : 'btn-warning'} !py-1 !px-3 text-sm`}
                     >
                         {actionLabel}
                     </button>
@@ -83,17 +83,17 @@ const ShopScreen: React.FC<ShopScreenProps> = ({ player, shopInventory, onBuyIte
           <h2 className="text-3xl font-orbitron text-cyan-300">Galactic Emporium</h2>
           <p className="text-yellow-400 font-bold">Your Gold: {player.gold} G</p>
         </div>
-        <button onClick={() => { soundService.playSound('ui_click'); onBack(); }} className="bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-4 rounded-lg transition-colors">
-          Back to Hub
+        <button onClick={() => { soundService.playSound('ui_click'); onBack(); }} className="btn btn-secondary">
+          Back
         </button>
       </div>
 
-      <div className="flex space-x-2 mt-2 border-b border-slate-700">
-          <button onClick={() => { soundService.playSound('ui_click'); setActiveTab('buy'); }} className={`py-2 px-4 font-bold ${activeTab === 'buy' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-400'}`}>Buy</button>
-          <button onClick={() => { soundService.playSound('ui_click'); setActiveTab('sell'); }} className={`py-2 px-4 font-bold ${activeTab === 'sell' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-400'}`}>Sell</button>
+      <div className="flex space-x-2 mt-2 border-b-2 border-cyan-500/20">
+          <button onClick={() => { soundService.playSound('ui_click'); setActiveTab('buy'); }} className={`py-2 px-4 font-bold transition-colors ${activeTab === 'buy' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-400 hover:text-white'}`}>Buy</button>
+          <button onClick={() => { soundService.playSound('ui_click'); setActiveTab('sell'); }} className={`py-2 px-4 font-bold transition-colors ${activeTab === 'sell' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-400 hover:text-white'}`}>Sell</button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[60vh] overflow-y-auto pr-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[60vh] overflow-y-auto pr-2">
             {activeTab === 'buy' && shopInventory.map((item, index) => (
                 <ItemCard key={`${item.id}-${index}`} item={item} onAction={() => onBuyItem(item)} actionLabel="Buy" />
             ))}
